@@ -1,0 +1,160 @@
+/* this program hlep the users to calculate thire budget 
+created by AL-Reem AL-Hazza
+the date of last modification 2024-05-03 */
+package budgetplanner;
+import java.util.Scanner;
+
+public class BudgetPlanner {
+    // declare variables 
+    private double income;
+    private double expenses ;
+    private double debts ;
+    private double taxRate; 
+    private double savings;
+  
+
+    // constructors
+    public BudgetPlanner() {
+        this.income = 0.0 ;
+        this.expenses = 0.0;
+        this.taxRate = 0.0;
+        this.debts = 0.0;   
+        this.savings = 0.0;
+    }
+
+    public BudgetPlanner(double income, double expenses, double debts, double taxRate) {
+        this.income = income;
+        this.expenses = expenses;
+        this.debts = debts;
+        this.taxRate = taxRate;
+        this.savings = 0.0;
+    }
+
+    
+      // setter and getter methods
+    public void setExpenses(double expenses) {
+        this.expenses = expenses;
+    }
+
+    public double getExpenses() {
+        return expenses;
+    }
+
+    public void setIncome(double income) {
+        this.income = income;
+    }
+
+    public double getIncome() {
+        return income;
+    }
+
+    public void setDebts(double debts) {
+        this.debts = debts;
+    }
+
+    public double getDebts() {
+        return debts;
+    }
+
+    public void setTaxRate(double taxes) {
+        this.taxRate = taxes;
+    }
+
+    public double getTaxRate() {
+        return taxRate;
+    }
+   
+    
+    // calculating tax amount, netIncome , savings method
+    public void calculateBudget() {
+        double taxAmount = income * (taxRate / 100); // convert percentage to decimal
+        double netIncome = income - taxAmount;
+        savings = netIncome - (expenses + debts);
+    }
+
+    public double getSavings() {
+        return savings;
+    } 
+    
+    
+    // toString method for budget planner
+    public String toString() {
+        return "Income: " + income + "\n" +
+               "Expenses: " + expenses + "\n" +
+               "Debts: " + debts + "\n" +
+               "Tax Rate: " + taxRate ;
+    }
+     
+    
+
+     // static class and methods for calculating monthly savings
+    public static class MonthlySavings {
+        public static double calculateMonthlySavings(BudgetPlanner budgetPlanner) {
+            budgetPlanner.calculateBudget();
+            return budgetPlanner.getSavings();
+        }
+    }
+
+    
+    // static class and methods for calculating yearly savings
+    public static class YearlySavings {
+        public static double calculateYearlySavings(BudgetPlanner budgetPlanner) {
+            budgetPlanner.calculateBudget();
+            return budgetPlanner.getSavings() * 12; // assuming consistent monthly savings
+        }
+    }
+    
+
+
+    public static void main(String[] args) {
+        // creating an object of scanner class and creating a class object
+        Scanner input = new Scanner(System.in);
+        BudgetPlanner user = new BudgetPlanner();
+       
+        
+        // using print statements and reading data from scanner 
+        System.out.println("Enter your income :");
+        double userIncome = input.nextDouble();
+        user.setIncome(userIncome);
+        
+        System.out.println("Enter your expenses :");
+        double userExpenses = input.nextDouble();
+        user.setExpenses(userExpenses);
+        
+        System.out.println("Enter your contry taxes rate :");
+        double userTaxRate = input.nextDouble();
+        user.setTaxRate(userTaxRate); 
+        
+        
+        // using array for the user debts
+        System.out.println("Enter the number of debts you have : ");
+        int userDebts = input.nextInt();
+        
+        double totalDebts = 0.0;
+        double [] debts = new double[userDebts];
+        
+        if (userDebts > 0){
+            System.out.println("Enter your debts value : ");
+        } else {
+            System.out.println("You have no debts.");
+        }
+        
+        for (int i = 0; i < userDebts; i++) {
+             System.out.print("Debt " + (i + 1) + ": ");
+            debts[i] = input.nextDouble();
+            totalDebts += debts[i];
+        }
+         user.setDebts(totalDebts);
+        
+         
+         // displaying the budget information
+        System.out.println(user.toString());
+        
+         
+        // displaying monthly and yearly savings using static methods in classes
+        System.out.println("Monthly savings: " + MonthlySavings.calculateMonthlySavings(user));
+        System.out.println("Yearly savings: " + YearlySavings.calculateYearlySavings(user));
+       
+    }
+    
+} 
